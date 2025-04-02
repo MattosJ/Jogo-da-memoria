@@ -53,6 +53,11 @@ body {
   height: 100%;
   object-fit: contain; /* Mantém a proporção da imagem */
   padding: 5px;
+  opacity: 0;
+}
+
+.card-aberto img {
+  opacity: 1;
 }
 
 .card:hover {
@@ -177,3 +182,4 @@ body {
     padding: 2px;
   }
 }
+

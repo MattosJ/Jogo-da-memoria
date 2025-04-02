@@ -53,6 +53,7 @@ const distribuirCartas = () => {
     const imagem = carta.querySelector('img');
     imagem.src = cartasEmbaralhadas[index];
     imagem.alt = cartasEmbaralhadas[index].split('/').pop().split('.')[0];
+    carta.addEventListener('click', () => virarCarta(carta))
     return carta; // Retorna o elemento modificado
   });
 }
@@ -62,3 +63,21 @@ document.querySelector('.btn-reiniciar').addEventListener('click', distribuirCar
 
 // Executa a distribuição de cartas quando a página carrega
 document.addEventListener('DOMContentLoaded', distribuirCartas);
+
+function myFunction() {
+  var element = document.getElementById("myDIV");
+  element.classList.toggle("mystyle");
+}
+
+const virarCarta = (carta) => {
+  const img = carta.querySelector('img')
+  
+  if (img.style.opacity === '1') {
+    (img.style.opacity = '0')
+  } else {
+    img.style.opacity = '1'
+  }
+
+
+  return carta
+}
