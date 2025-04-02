@@ -46,7 +46,21 @@ const distribuirCartas = () => {
   
   // Cria um array de elementos para poder usar map
   const arrayElementos = Array.from(elementosCartas);
-  
+  const novasCartas = arrayElementos.map((carta, index) => { 
+  // Clona o elemento da carta
+    const novaCarta = carta.cloneNode(true); 
+    // Adiciona a classe 'virou' para mostrar a imagem
+    carta.replaceWith(novaCarta);
+    const imagem = novaCarta.querySelector('img');
+    imagem.src = cartasEmbaralhadas[index];
+    imagem.alt = cartasEmbaralhadas[index].split('/').pop().split('.')[0];
+    
+    // Adiciona o listener apenas uma vez
+    novaCarta.addEventListener('click', () => virarCarta(novaCarta));
+    return novaCarta; // Retorna o elemento clonado
+  });
+
+
   // Aplica as imagens às cartas 
   // O map retorna um novo array com os elementos modificados
   arrayElementos.map((carta, index) => {
@@ -59,11 +73,24 @@ const distribuirCartas = () => {
   });
 }
 
+// Fecha as cartas, removendo a classe 'virou'
+const fecharTodasCartas = () => {
+  const cartas = document.querySelectorAll('.card');
+  cartas.forEach(carta => {
+    carta.classList.remove('virou');
+  });
+};
+
+const reiniciarJogo = () => {
+  fecharTodasCartas();
+  distribuirCartas();
+};
+
 // Adiciona o evento para o botão de reiniciar
-document.querySelector('.btn-reiniciar').addEventListener('click', distribuirCartas);
+document.querySelector('.btn-reiniciar').addEventListener('click', reiniciarJogo);
 
 // Executa a distribuição de cartas quando a página carrega
-document.addEventListener('DOMContentLoaded', distribuirCartas);
+document.addEventListener('DOMContentLoaded', reiniciarJogo);
 
 function myFunction() {
   var element = document.getElementById("myDIV");
@@ -72,5 +99,7 @@ function myFunction() {
 
 //teste de virada de carta
 function virarCarta(carta) {
+  const novaCarta = carta.cloneNode(true);
   carta.classList.toggle('virou');
+  
 }
