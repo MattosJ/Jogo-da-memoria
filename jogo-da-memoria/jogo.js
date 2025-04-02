@@ -53,6 +53,7 @@ const distribuirCartas = () => {
     const imagem = carta.querySelector('img');
     imagem.src = cartasEmbaralhadas[index];
     imagem.alt = cartasEmbaralhadas[index].split('/').pop().split('.')[0];
+    //testa de clique na carta
     carta.addEventListener('click', () => virarCarta(carta))
     return carta; // Retorna o elemento modificado
   });
@@ -69,15 +70,7 @@ function myFunction() {
   element.classList.toggle("mystyle");
 }
 
-const virarCarta = (carta) => {
-  const img = carta.querySelector('img')
-  
-  if (img.style.opacity === '1') {
-    (img.style.opacity = '0')
-  } else {
-    img.style.opacity = '1'
-  }
-
-
-  return carta
+//teste de virada de carta
+function virarCarta(carta) {
+  carta.classList.toggle('virou');
 }
