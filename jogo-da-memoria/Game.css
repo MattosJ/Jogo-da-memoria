@@ -37,11 +37,12 @@ body {
 }
 
 .card {
-  background-color: white;
+  background-color: transparent;
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s ease;
   aspect-ratio: 1/1; /* Mantém as cartas como quadrados */
+  perspective: 1000px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,13 +52,53 @@ body {
 .card img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Mantém a proporção da imagem */
+  object-fit: contain; 
   padding: 5px;
   opacity: 0;
 }
 
-.card-aberto img {
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: inherit; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-back {
+  background: #a0bed6;
+  color: white;
+}
+
+.card-front {
+  background: white;
+  transform: rotateY(180deg);
+  padding: 10px;
+}
+
+.card-front img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
   opacity: 1;
+}
+
+.card.virou .card-inner {
+  transform: rotateY(180deg);
 }
 
 .card:hover {
@@ -101,6 +142,11 @@ body {
 
 .btn-voltar:active, .btn-reiniciar:active {
   transform: translateY(1px);
+}
+.card.encontrada {
+  background-color: #95a5a6;
+  cursor: default;
+  /* Você pode adicionar outros estilos para cartas encontradas */
 }
 
 /* Media Queries para responsividade */

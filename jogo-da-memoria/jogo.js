@@ -8,7 +8,16 @@ const cartas = [
   'imgs/php.png', 'imgs/python.png', 'imgs/Ruby.png', 'imgs/SQL.png', 'imgs/Swift.png'
 ];
 
-// Implementação  do algoritmo Fisher-Yates
+// Estado do jogo para controlar as cartas viradas e pares encontrados
+const estadoJogo = {
+  cartasViradas: [],
+  podeVirar: true,
+  paresEncontrados: 0,
+  totalPares: 15, // 30 cartas / 2
+  tentativas:0
+};
+
+// Implementação do algoritmo Fisher-Yates
 const embaralharCartas = (array) => {
   // Cria uma cópia do array para evitar mutação do original
   const copiaArray = [...array];
@@ -36,6 +45,80 @@ const embaralharCartas = (array) => {
   return embaralharRecursivo(copiaArray, copiaArray.length - 1);
 };
 
+// Função para virar carta (versão atualizada)
+const virarCarta = (carta) => {
+  // Verifica se a carta pode ser virada
+  if (!estadoJogo.podeVirar || 
+      carta.classList.contains('encontrada') || 
+      (carta.classList.contains('virou') && estadoJogo.cartasViradas.includes(carta)) ||
+      estadoJogo.cartasViradas.length >= 2) {
+    return;
+  }
+  
+  // Virar a carta
+  carta.classList.add('virou');
+  
+  // Adicionar à lista de cartas viradas
+  estadoJogo.cartasViradas.push(carta);
+  
+  // Verificar se duas cartas foram viradas
+  if (estadoJogo.cartasViradas.length === 2) {
+    estadoJogo.podeVirar = false;
+    estadoJogo.tentativas ++;
+    setTimeout(() => verificarPar(), 1000);
+  }
+};
+
+// Função para verificar se as cartas formam um par
+const verificarPar = () => {
+  const [carta1, carta2] = estadoJogo.cartasViradas;
+  const img1 = carta1.querySelector('img').src;
+  const img2 = carta2.querySelector('img').src;
+  
+  // Compara as imagens das cartas
+  if (img1 === img2) {
+    // É um par!
+    marcarComoEncontradas();
+  } else {
+    // Não é um par
+    desvirarCartas();
+  }
+};
+
+// Função para marcar cartas como encontradas - usando map em vez de forEach
+const marcarComoEncontradas = () => {
+  // Usa map para aplicar a operação em todas as cartas
+  estadoJogo.cartasViradas.map(carta => {
+    carta.classList.add('encontrada');
+    return carta; // Retorno explícito para map
+  });
+  
+  // Incrementa o contador de pares e limpa o estado
+  estadoJogo.paresEncontrados++;
+  estadoJogo.cartasViradas = [];
+  estadoJogo.podeVirar = true;
+  
+  // Verifica se o jogo acabou
+  if (estadoJogo.paresEncontrados === estadoJogo.totalPares) {
+    setTimeout(() => {
+      alert("Parabéns! Você completou o jogo!");
+    }, 500);
+  }
+};
+
+// Função para desvirar cartas que não formam par - usando map em vez de forEach
+const desvirarCartas = () => {
+  // Usa map para aplicar a operação em todas as cartas
+  estadoJogo.cartasViradas.map(carta => {
+    carta.classList.remove('virou');
+    return carta; // Retorno explícito para map
+  });
+  
+  // Limpa o estado
+  estadoJogo.cartasViradas = [];
+  estadoJogo.podeVirar = true;
+};
+
 // Função para distribuir as cartas no tabuleiro
 const distribuirCartas = () => {
   // Obtém as cartas embaralhadas
@@ -47,37 +130,56 @@ const distribuirCartas = () => {
   // Cria um array de elementos para poder usar map
   const arrayElementos = Array.from(elementosCartas);
   
-  // Aplica as imagens às cartas 
-  // O map retorna um novo array com os elementos modificados
+  // Aplica as imagens às cartas
   arrayElementos.map((carta, index) => {
+    // Remove classes anteriores que possam ter ficado
+    carta.classList.remove('virou', 'encontrada');
+    
     const imagem = carta.querySelector('img');
     imagem.src = cartasEmbaralhadas[index];
     imagem.alt = cartasEmbaralhadas[index].split('/').pop().split('.')[0];
-    carta.addEventListener('click', () => virarCarta(carta))
-    return carta; // Retorna o elemento modificado
+    
+    // Remove listeners antigos para evitar duplicação
+    const novoElemento = carta.cloneNode(true);
+    carta.replaceWith(novoElemento);
+    
+    // Adiciona o listener
+    novoElemento.addEventListener('click', () => virarCarta(novoElemento));
+    
+    return novoElemento;
   });
-}
+  
+  // Reset do estado do jogo
+  estadoJogo.cartasViradas = [];
+  estadoJogo.podeVirar = true;
+  estadoJogo.paresEncontrados = 0;
+};
+
+// Fecha as cartas, removendo a classe 'virou' 
+const fecharTodasCartas = () => {
+  const cartas = document.querySelectorAll('.card');
+  
+  // Converte NodeList para Array
+  Array.from(cartas).map(carta => {
+    carta.classList.remove('virou');
+    carta.classList.remove('encontrada');
+    return carta;
+  });
+};
+
+// Função para reiniciar o jogo
+const reiniciarJogo = () => {
+  // Reset do estado do jogo
+  estadoJogo.cartasViradas = [];
+  estadoJogo.podeVirar = true;
+  estadoJogo.paresEncontrados = 0;
+  estadoJogo.tentativas = 0;
+  fecharTodasCartas();
+  distribuirCartas();
+};
 
 // Adiciona o evento para o botão de reiniciar
-document.querySelector('.btn-reiniciar').addEventListener('click', distribuirCartas);
+document.querySelector('.btn-reiniciar').addEventListener('click', reiniciarJogo);
 
 // Executa a distribuição de cartas quando a página carrega
-document.addEventListener('DOMContentLoaded', distribuirCartas);
-
-function myFunction() {
-  var element = document.getElementById("myDIV");
-  element.classList.toggle("mystyle");
-}
-
-const virarCarta = (carta) => {
-  const img = carta.querySelector('img')
-  
-  if (img.style.opacity === '1') {
-    (img.style.opacity = '0')
-  } else {
-    img.style.opacity = '1'
-  }
-
-
-  return carta
-}
+document.addEventListener('DOMContentLoaded', reiniciarJogo);
