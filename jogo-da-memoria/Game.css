@@ -143,6 +143,11 @@ body {
 .btn-voltar:active, .btn-reiniciar:active {
   transform: translateY(1px);
 }
+.card.encontrada {
+  background-color: #95a5a6;
+  cursor: default;
+  /* Você pode adicionar outros estilos para cartas encontradas */
+}
 
 /* Media Queries para responsividade */
 @media (max-width: 768px) {
