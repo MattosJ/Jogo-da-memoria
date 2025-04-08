@@ -16,6 +16,7 @@ const estadoJogo = {
   totalPares: 15, // 30 cartas / 2
   tentativas:0
 };
+// função acima é infucional pois o estados dos itens seram modificáveis. ex: tentativas será incrementado e decrementado durante a execução do jogo.
 
 
 // Implementação do algoritmo Fisher-Yates
@@ -83,11 +84,12 @@ const virarCarta = (carta) => {
   
   // Adicionar à lista de cartas viradas
   estadoJogo.cartasViradas.push(carta);
+  // não é funcional pois adiciona elementos ao registro original.
   
   // Verificar se duas cartas foram viradas
   if (estadoJogo.cartasViradas.length === 2) {
-    estadoJogo.podeVirar = false;
-    estadoJogo.tentativas ++;
+    estadoJogo.podeVirar = false; // // mais um exemplo do porque o estado do jogo não é uma função pura.
+    estadoJogo.tentativas ++; // mais um exemplo do porque o estado do jogo não é uma função pura.
     setTimeout(() => verificarPar(), 1000);
   }
 };
@@ -118,9 +120,9 @@ const marcarComoEncontradas = () => {
   });
   
   // Incrementa o contador de pares e limpa o estado
-  estadoJogo.paresEncontrados++;
-  estadoJogo.cartasViradas = [];
-  estadoJogo.podeVirar = true;
+  estadoJogo.paresEncontrados++; // não é puro.
+  estadoJogo.cartasViradas = []; // não é puro.
+  estadoJogo.podeVirar = true; // não é puro. motivos iguais aos acima.
   
   // Verifica se o jogo acabou
   if (estadoJogo.paresEncontrados === estadoJogo.totalPares) {
@@ -130,7 +132,7 @@ const marcarComoEncontradas = () => {
   }
 };
 
-// Função para desvirar cartas que não formam par - usando map em vez de forEach
+// Função para desvirar cartas que não formam par
 const desvirarCartas = () => {
   // Usa map para aplicar a operação em todas as cartas
   estadoJogo.cartasViradas.map(carta => {
