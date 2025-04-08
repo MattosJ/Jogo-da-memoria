@@ -24,6 +24,23 @@ body {
   padding: 15px;
 }
 
+.placar {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background-color: #88bbd6;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.placar-item {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+
 .game-board {
   background-color: #88bbd6;
   border-radius: 15px;

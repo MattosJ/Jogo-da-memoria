@@ -17,6 +17,7 @@ const estadoJogo = {
   tentativas:0
 };
 
+
 // Implementação do algoritmo Fisher-Yates
 const embaralharCartas = (array) => {
   // Cria uma cópia do array para evitar mutação do original
@@ -43,6 +44,28 @@ const embaralharCartas = (array) => {
   
   // Inicia a recursão a partir do último elemento
   return embaralharRecursivo(copiaArray, copiaArray.length - 1);
+};
+
+// Função para gerar o placar
+const gerarPlacar = (tentativas, pares) => ({
+  movimentos: tentativas,
+  pares: pares
+});
+
+// Função para atualizar o placar no HTML
+const renderizarPlacar = ({ movimentos, pares }) => {
+  const elMov = document.getElementById('movimentos');
+  const elPares = document.getElementById('pares');
+  if (elMov && elPares) {
+    elMov.textContent = movimentos;
+    elPares.textContent = pares;
+  }
+};
+
+// Função para atualizar o placar
+const atualizarPlacar = () => {
+  const dados = gerarPlacar(estadoJogo.tentativas, estadoJogo.paresEncontrados);
+  renderizarPlacar(dados);
 };
 
 // Função para virar carta (versão atualizada)
@@ -83,6 +106,7 @@ const verificarPar = () => {
     // Não é um par
     desvirarCartas();
   }
+  atualizarPlacar();
 };
 
 // Função para marcar cartas como encontradas - usando map em vez de forEach
@@ -176,6 +200,7 @@ const reiniciarJogo = () => {
   estadoJogo.tentativas = 0;
   fecharTodasCartas();
   distribuirCartas();
+  atualizarPlacar();
 };
 
 // Adiciona o evento para o botão de reiniciar
