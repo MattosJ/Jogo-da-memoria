@@ -13,7 +13,11 @@ Ao completar os 15 pares, o jogo exibe uma mensagem informando a conclusão.
 Este é um projeto autoral, desenvolvido como parte de um projeto acadêmico para consolidação de conceitos do paradigma funcional.  
 Foi utilizado HTML, CSS e JavaScript na sua construção.
 
-## Como Executar
+## Como Jogar
+Você pode acessar o jogo diretamente pelo link:
+🔗 [Jogar agora no Netlify](https://linguaguemmatcher.netlify.app/jogo-da-memoria/)
+
+Ou, se preferir executar localmente:
 1. Clone o repositório:
    ```bash
    git clone https://github.com/seu-usuario/Jogo-da-memoria.git
